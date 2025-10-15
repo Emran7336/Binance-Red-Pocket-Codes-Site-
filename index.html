@@ -129,7 +129,8 @@
     </div>
     
     <div id="publishModal" class="modal">
-        <div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="modal-title"><i class="fas fa-share-alt me-2"></i>Publish New Code</h5><button type="button" class="btn-close btn-close-white" onclick="hidePublishModal()"></button></div><div class="modal-body"><form id="publishForm" onsubmit="event.preventDefault(); handlePublish();">
+        <div class="modal-dialog modal-dialog-centered"><div class="modal-content"><div class="modal-header"><h5 class="modal-title"><i class="fas fa-share-alt me-2"></i>Publish New Code</h5><button type="button" class="btn-close btn-close-white" onclick="hidePublishModal()"></button></div><div class="modal-body">
+        <form id="publishForm">    
             <!-- [FIXED] Form mein placeholders daal diye gaye hain -->
             <div class="mb-3"><label class="form-label">Red Pocket Code</label><input type="text" class="form-control" id="codeInput" placeholder="e.g. BPRSQM4DAU" required></div>
             <div class="mb-3"><label class="form-label">How many can claim?</label><input type="number" class="form-control" id="claimLimit" placeholder="e.g. 5, 10, 20, 50" min="1" required></div>
@@ -137,7 +138,9 @@
             <div class="mb-3"><label class="form-label">Expiry Date</label><input type="date" class="form-control" id="expiryDate" required></div>
         </form></div><div class="modal-footer"><button type="button" class="btn btn-secondary" onclick="hidePublishModal()">Cancel</button>
         <!-- [FIXED] Is button ka function ab bilkul theek kaam karega -->
-        <button type="button" class="btn btn-primary" onclick="handlePublish()"><i class="fas fa-upload me-2"></i>Publish Code</button></div></div></div>
+        <button type="button" class="btn btn-primary" onclick="handlePublish()"><i class="fas fa-upload me-2"></i>Publish Code</button>
+        
+        </div></div></div>
     </div>
 
     <div id="adblocker-modal" class="adblocker-modal-container">
