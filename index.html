@@ -286,35 +286,49 @@
 
         // [FIXED] Yeh function ab bilkul sahi kaam karega jab aap modal se publish karenge
         function handlePublish() {
-            const codeInput = document.getElementById('codeInput').value.trim();
-            const claimLimit = document.getElementById('claimLimit').value;
-            const coinType = document.getElementById('coinType').value.trim().toUpperCase();
-            const expiryDate = document.getElementById('expiryDate').value;
+    try {
+        const codeInput = document.getElementById('codeInput').value.trim();
+        const claimLimit = document.getElementById('claimLimit').value;
+        const coinType = document.getElementById('coinType').value.trim().toUpperCase();
+        const expiryDate = document.getElementById('expiryDate').value;
 
-            if (!codeInput || !claimLimit || !coinType || !expiryDate) {
-                alert('Please saari details bharein.');
-                return;
-            }
-
-            const newCode = {
-                code: codeInput,
-                limit: parseInt(claimLimit),
-                coin: coinType,
-                expiry: expiryDate,
-                publishedAt: new Date().toISOString()
-            };
-
-            database.ref('codes').push(newCode)
-                .then(() => {
-                    alert('Aapka code successfully publish ho gaya hai!');
-                    hidePublishModal();
-                    document.getElementById('publishForm').reset();
-                })
-                .catch((error) => {
-                    console.error("Error publishing code:", error);
-                    alert('Code publish karne mein galti hui. Please dobara try karein ya console check karein.');
-                });
+        if (!codeInput || !claimLimit || !coinType || !expiryDate) {
+            alert('Error: Please saari details bharein.');
+            return;
         }
+
+        const newCode = {
+            code: codeInput,
+            limit: parseInt(claimLimit),
+            coin: coinType,
+            expiry: expiryDate,
+            publishedAt: new Date().toISOString()
+        };
+
+        // Yeh line check karegi ke Firebase chal raha hai ya nahi
+        if (!database) {
+            alert('Error: Database connection nahi hai.');
+            return;
+        }
+
+        database.ref('codes').push(newCode)
+            .then(() => {
+                alert('Success: Aapka code successfully publish ho gaya hai!');
+                hidePublishModal();
+                document.getElementById('publishForm').reset();
+            })
+            .catch((error) => {
+                // Agar Firebase mein error aaye to yeh message dikhayega
+                console.error("Firebase Error:", error);
+                alert('Firebase Error: ' + error.message);
+            });
+
+    } catch (error) {
+        // Agar code mein koi aur galti ho to yeh message dikhayega
+        console.error("JavaScript Error:", error);
+        alert('JavaScript Error: ' + error.message);
+    }
+}
 
         function isExpired(expiryDate) {
             const now = new Date();
