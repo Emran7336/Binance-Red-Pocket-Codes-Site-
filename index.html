@@ -169,9 +169,9 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
+   <script>
+    try {
+        // --- [NAYA] ANTI AD-BLOCKER LOGIC ---
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 if (typeof canRunAds === 'undefined') {
@@ -180,18 +180,20 @@
             }, 1500);
         });
 
+        // --- FIREBASE CONFIG ---
         const firebaseConfig = {
-            apiKey: "AIzaSyCsw-siVW0LD0PoOPrOHuO4GVnQbZu0JUE",
-            authDomain: "binance-red-pocket-codes-5a5fe.firebaseapp.com",
-            projectId: "binance-red-pocket-codes-5a5fe",
-            storageBucket: "binance-red-pocket-codes-5a5fe.firebasestorage.app",
-            messagingSenderId: "686927723105",
-            appId: "1:686927723105:web:04ae7cc7b79cb807d1c820",
-            measurementId: "G-CP27WC80GQ"
+          apiKey: "AIzaSyCsw-siVW0LD0PoOPrOHuO4GVnQbZu0JUE",
+          authDomain: "binance-red-pocket-codes-5a5fe.firebaseapp.com",
+          projectId: "binance-red-pocket-codes-5a5fe",
+          storageBucket: "binance-red-pocket-codes-5a5fe.firebasestorage.app",
+          messagingSenderId: "686927723105",
+          appId: "1:686927723105:web:04ae7cc7b79cb807d1c820",
+          measurementId: "G-CP27WC80GQ"
         };
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
+        // --- DOM Elements ---
         const adminUpdateSection = document.getElementById('adminUpdateSection');
         const themeToggleBtn = document.getElementById('theme-toggle-btn');
         const adminLoginModal = document.getElementById('adminLoginModal');
@@ -200,6 +202,7 @@
         const expiredCodesList = document.getElementById('expiredCodesList');
         const userPoints = document.getElementById('userPoints');
 
+        // --- THEME TOGGLE ---
         (function() {
             const currentTheme = localStorage.getItem('theme');
             if (currentTheme === 'light') {
@@ -220,6 +223,7 @@
             }
         }
         
+        // --- MODAL CONTROLS ---
         function showAdminLoginModal() { adminLoginModal.style.display = 'block'; }
         function hideAdminLoginModal() { adminLoginModal.style.display = 'none'; }
         function showPublishModal() { publishModal.style.display = 'block'; }
@@ -229,6 +233,7 @@
             if (event.target == publishModal) hidePublishModal();
         }
 
+        // --- POINTS SYSTEM ---
         function loadPoints() {
             let points = localStorage.getItem('userPoints') || 0;
             userPoints.innerText = points;
@@ -239,33 +244,16 @@
         document.addEventListener('DOMContentLoaded', loadPoints);
         
         // --- [NAYA] ADVERTISEMENT LOGIC ---
-        // Popunder ad ka direct link (apne Adsterra account se hasil karein)
         const popunderAdUrl = 'https://machinemerrimentresent.com/x4/a3/6c/x4a36cd2ce0d463d1c81e35d1f2e1a49.js'; 
-
-        // Yeh function pehle ad chalayega, phir aapka kaam karega
         function runAdAndProceed(originalFunction) {
-            // Naye tab mein ad kholne ki koshish
-            const adWindow = window.open(popunderAdUrl, '_blank');
-            
-            // Foran apna kaam anjaam dein
+            window.open(popunderAdUrl, '_blank');
             if (originalFunction && typeof originalFunction === 'function') {
                 originalFunction();
             }
         }
 
-        // --- [FIXED] BUTTON FUNCTIONALITY ---
-        
-        // Publish button ke click ko handle karne wala naya function
-        function handlePublishClick() {
-            runAdAndProceed(showPublishModal); // Ad chalao, phir form dikhao
-        }
-
-        // Watch Ad button ke click ko handle karne wala naya function
-        function watchAdForPoints() {
-            runAdAndProceed(grantPoints); // Ad chalao, phir points do
-        }
-
-        // Points dene ka alag function
+        function handlePublishClick() { runAdAndProceed(showPublishModal); }
+        function watchAdForPoints() { runAdAndProceed(grantPoints); }
         function grantPoints() {
             alert('Shukriya! Aapko 10 points mil gaye hain.');
             let currentPoints = parseInt(userPoints.innerText);
@@ -277,7 +265,6 @@
         function handleAdminLogin() {
             const email = document.getElementById('adminEmail').value;
             const pass = document.getElementById('adminPassword').value;
-            // NOTE: Yeh default credentials hain, inhein zaroor badlein!
             if (email === "admin@yourdomain.com" && pass === "securepassword123") {
                 adminUpdateSection.classList.remove('hidden');
                 alert('Login successful! Admin section is now visible.');
@@ -287,52 +274,38 @@
             }
         }
 
-        // [FIXED] Yeh function ab bilkul sahi kaam karega jab aap modal se publish karenge
+        // --- YEH AAPKA ASAL FUNCTION HAI ---
         function handlePublish() {
-    try {
-        const codeInput = document.getElementById('codeInput').value.trim();
-        const claimLimit = document.getElementById('claimLimit').value;
-        const coinType = document.getElementById('coinType').value.trim().toUpperCase();
-        const expiryDate = document.getElementById('expiryDate').value;
+            const codeInput = document.getElementById('codeInput').value.trim();
+            const claimLimit = document.getElementById('claimLimit').value;
+            const coinType = document.getElementById('coinType').value.trim().toUpperCase();
+            const expiryDate = document.getElementById('expiryDate').value;
 
-        if (!codeInput || !claimLimit || !coinType || !expiryDate) {
-            alert('Error: Please saari details bharein.');
-            return;
+            if (!codeInput || !claimLimit || !coinType || !expiryDate) {
+                alert('Please saari details bharein.');
+                return;
+            }
+
+            const newCode = {
+                code: codeInput,
+                limit: parseInt(claimLimit),
+                coin: coinType,
+                expiry: expiryDate,
+                publishedAt: new Date().toISOString()
+            };
+
+            database.ref('codes').push(newCode)
+                .then(() => {
+                    alert('Aapka code successfully publish ho gaya hai!');
+                    hidePublishModal();
+                    document.getElementById('publishForm').reset();
+                })
+                .catch((error) => {
+                    alert('Firebase Error: ' + error.message);
+                });
         }
 
-        const newCode = {
-            code: codeInput,
-            limit: parseInt(claimLimit),
-            coin: coinType,
-            expiry: expiryDate,
-            publishedAt: new Date().toISOString()
-        };
-
-        // Yeh line check karegi ke Firebase chal raha hai ya nahi
-        if (!database) {
-            alert('Error: Database connection nahi hai.');
-            return;
-        }
-
-        database.ref('codes').push(newCode)
-            .then(() => {
-                alert('Success: Aapka code successfully publish ho gaya hai!');
-                hidePublishModal();
-                document.getElementById('publishForm').reset();
-            })
-            .catch((error) => {
-                // Agar Firebase mein error aaye to yeh message dikhayega
-                console.error("Firebase Error:", error);
-                alert('Firebase Error: ' + error.message);
-            });
-
-    } catch (error) {
-        // Agar code mein koi aur galti ho to yeh message dikhayega
-        console.error("JavaScript Error:", error);
-        alert('JavaScript Error: ' + error.message);
-    }
-}
-
+        // --- FIREBASE DATA LOADING ---
         function isExpired(expiryDate) {
             const now = new Date();
             const expiry = new Date(expiryDate);
@@ -343,14 +316,11 @@
         database.ref('codes').on('value', (snapshot) => {
             let activeHtml = '';
             let expiredHtml = '';
-            
             const data = snapshot.val();
             if (data) {
                 const sortedKeys = Object.keys(data).sort((a, b) => new Date(data[b].publishedAt) - new Date(data[a].publishedAt));
-                
                 sortedKeys.forEach(key => {
                     const code = data[key];
-                    
                     const codeCardHtml = `
                         <div class="code-card">
                             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -361,7 +331,6 @@
                             <p class="mb-0 text-muted">Expires On: ${new Date(code.expiry).toLocaleDateString()}</p>
                         </div>
                     `;
-
                     if (isExpired(code.expiry)) {
                         expiredHtml += codeCardHtml;
                     } else {
@@ -369,10 +338,14 @@
                     }
                 });
             }
-
             codesList.innerHTML = activeHtml || '<div class="text-center py-5"><i class="fas fa-gift fa-3x text-muted mb-3"></i><p>Abhi koi active code nahi hai. Aap pehla code publish karein!</p></div>';
             expiredCodesList.innerHTML = expiredHtml || '<div class="text-center py-4"><i class="fas fa-clock fa-3x text-muted mb-3"></i><p>Yahan koi expired code nahi hai.</p></div>';
         });
-    </script>
+
+    } catch (error) {
+        // Agar poori script mein kahin bhi galti hogi, to yeh popup aayega
+        alert('FATAL SCRIPT ERROR: ' + error.message);
+    }
+</script>
 </body>
 </html>
