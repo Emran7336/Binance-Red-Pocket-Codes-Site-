@@ -168,10 +168,9 @@
             </div>
         </div>
     </footer>
-
-   <script>
+<script>
     try {
-        // --- [NAYA] ANTI AD-BLOCKER LOGIC ---
+        // --- ANTI AD-BLOCKER LOGIC ---
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(function() {
                 if (typeof canRunAds === 'undefined') {
@@ -243,7 +242,7 @@
         }
         document.addEventListener('DOMContentLoaded', loadPoints);
         
-        // --- [NAYA] ADVERTISEMENT LOGIC ---
+        // --- ADVERTISEMENT LOGIC ---
         const popunderAdUrl = 'https://machinemerrimentresent.com/x4/a3/6c/x4a36cd2ce0d463d1c81e35d1f2e1a49.js'; 
         function runAdAndProceed(originalFunction) {
             window.open(popunderAdUrl, '_blank');
@@ -274,7 +273,7 @@
             }
         }
 
-        // --- YEH AAPKA ASAL FUNCTION HAI ---
+        // --- MAIN PUBLISH FUNCTION ---
         function handlePublish() {
             const codeInput = document.getElementById('codeInput').value.trim();
             const claimLimit = document.getElementById('claimLimit').value;
@@ -347,5 +346,6 @@
         alert('FATAL SCRIPT ERROR: ' + error.message);
     }
 </script>
+
 </body>
 </html>
